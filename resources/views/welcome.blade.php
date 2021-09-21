@@ -8,13 +8,12 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{asset('css/app.css')}}">
         <script src="{{asset('js/app.js')}}" defer></script>
 
         <!-- Styles -->
     </head>
     <body>
-        <div id="app">
-            <router-view></router-view>
-        </div>
+        <div id="app"></div>
     </body>
 </html>
