@@ -1,7 +1,10 @@
 <template>
-    <div>
-        <h1>{{itemTitle}}</h1>
-        <div>{{itemContent}}</div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{{itemTitle}}</h5>
+            <hr class="dropdown-divider">
+            <p class="card-text">{{itemContent}}</p>
+        </div>
     </div>
 </template>
 
