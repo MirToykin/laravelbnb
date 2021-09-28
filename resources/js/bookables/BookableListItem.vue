@@ -1,5 +1,5 @@
 <template>
-    <div class="card mb-4">
+    <div class="card mb-4 w-100">
         <div class="card-body">
             <h5 class="card-title">{{itemTitle}}</h5>
             <hr class="dropdown-divider">

@@ -9,12 +9,12 @@
             >
                 <div
                     v-for="(item, key) in getRowItems(row)"
-                    class="col"
+                    class="col d-flex align-items-stretch"
                     :key="`row_${row}:col_${key}`"
                 >
                     <BookableListItem
                         :item-title="item.title"
-                        :item-content="item.content">
+                        :item-content="item.description">
                     </BookableListItem>
                 </div>
                 <div
@@ -43,39 +43,12 @@
         },
         created() {
             this.loading = true
-            setTimeout(() => {
-                this.loading = false
-                this.bookables = [
-                    {
-                        title: 'Cheap Villa',
-                        content: 'Very cheap villa'
-                    },
-                    {
-                        title: 'Expensive Villa',
-                        content: 'Very expensive villa'
-                    },
-                    {
-                        title: 'Cheap Villa',
-                        content: 'Very cheap villa'
-                    },
-                    {
-                        title: 'Expensive Villa',
-                        content: 'Very expensive villa'
-                    },
-                    {
-                        title: 'Cheap Villa',
-                        content: 'Very cheap villa'
-                    },
-                    {
-                        title: 'Expensive Villa',
-                        content: 'Very expensive villa'
-                    },
-                    {
-                        title: 'Cheap Villa',
-                        content: 'Very cheap villa'
-                    }
-                ]
-            }, 2000)
+            axios.get('/api/bookables')
+                .then(response => {
+                    this.bookables = response.data
+                    this.loading = false
+                })
+                .catch(error => console.log(error.message))
         },
         computed: {
             rows() {
