@@ -13,8 +13,8 @@
                     :key="`row_${row}:col_${key}`"
                 >
                     <BookableListItem
-                        :item-title="item.title"
-                        :item-content="item.description">
+                        v-bind="item"
+                    >
                     </BookableListItem>
                 </div>
                 <div
@@ -44,11 +44,9 @@
         created() {
             this.loading = true
             axios.get('/api/bookables')
-                .then(response => {
-                    this.bookables = response.data
-                    this.loading = false
-                })
+                .then(response => this.bookables = response.data)
                 .catch(error => console.log(error.message))
+                .finally(() => this.loading = false)
         },
         computed: {
             rows() {
