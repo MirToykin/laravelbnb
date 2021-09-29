@@ -10,6 +10,8 @@
                     id="from"
                     class="form-control form-control-sm"
                     placeholder="Start date"
+                    v-model="from"
+                    @keyup.enter="check"
                 >
             </div>
             <div class="form-group col-md-6">
@@ -20,9 +22,11 @@
                     id="to"
                     class="form-control form-control-sm"
                     placeholder="End date"
+                    v-model="to"
+                    @keyup.enter="check"
                 >
             </div>
-            <button class="btn btn-secondary btn-block">Check</button>
+            <button @click="check" class="btn btn-secondary btn-block">Check</button>
         </div>
     </div>
 </template>
@@ -30,7 +34,17 @@
 <script>
     export default {
         name: "Availability",
-
+        data() {
+            return {
+                from: null,
+                to: null
+            }
+        },
+        methods: {
+            check() {
+                alert('Checking')
+            }
+        }
     }
 </script>
 
