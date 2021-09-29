@@ -44,7 +44,7 @@
         created() {
             this.loading = true
             axios.get('/api/bookables')
-                .then(response => this.bookables = response.data)
+                .then(response => this.bookables = response.data.data)
                 .catch(error => console.log(error.message))
                 .finally(() => this.loading = false)
         },

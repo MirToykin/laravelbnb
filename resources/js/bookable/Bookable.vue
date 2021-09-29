@@ -25,8 +25,8 @@
         },
         created() {
             this.loading = true
-            axios.get(`/api/bookable/${this.$route.params.id}`)
-                .then(response => this.bookable = response.data)
+            axios.get(`/api/bookables/${this.$route.params.id}`)
+                .then(response => this.bookable = response.data.data)
                 .catch(err => console.log(err.message))
                 .finally(() => this.loading = false)
         }
