@@ -10,6 +10,10 @@ class Bookable extends Model
         return $this->hasMany(Booking::class);
     }
 
+    public function reviews() {
+        $this->hasMany(Review::class);
+    }
+
     public function availableFor($form, $to) {
         return 0 === $this->bookings()->betweenDates($form, $to);
     }
