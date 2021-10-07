@@ -11,7 +11,7 @@ class Bookable extends Model
     }
 
     public function reviews() {
-        $this->hasMany(Review::class);
+        return $this->hasMany(Review::class);
     }
 
     public function availableFor($form, $to) {
