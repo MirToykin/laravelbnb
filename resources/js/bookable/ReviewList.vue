@@ -2,7 +2,7 @@
     <div>
         <div class="d-flex justify-content-between align-items-center pt-4">
             <h6 class="text-uppercase text-secondary font-weight-bolder">Review List</h6>
-            <star-rating class="fa-lg" :rating="averageRating" bookable-id="0"></star-rating>
+            <star-rating class="fa-lg" :value="averageRating"></star-rating>
         </div>
 
         <div v-if="loading">Loading data...</div>
@@ -11,7 +11,7 @@
                 <div class="row pt-4">
                     <div class="col-md-6">John Doe</div>
                     <div class="col-md-6 d-flex justify-content-end">
-                        <star-rating :bookable-id="bookableId" :rating="review.rating"></star-rating>
+                        <star-rating :value="review.rating"></star-rating>
                     </div>
                 </div>
                 <div class="row">

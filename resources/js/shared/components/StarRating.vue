@@ -1,8 +1,16 @@
 <template>
     <div class="d-flex">
-        <i class="fas fa-star" v-for="n in fullStars" :key="bookableId+'_full_ '+n"></i>
+        <i class="fas fa-star"
+            v-for="n in fullStars"
+            :key="'full_ '+n"
+            @click="$emit('input', n)"
+        ></i>
         <i v-if="halfStar" class="fas fa-star-half-alt"></i>
-        <i v-for="n in emptyStars" class="far fa-star" :key="bookableId+'_empty_ '+n"></i>
+        <i v-for="n in emptyStars"
+           class="far fa-star"
+           :key="'empty_ '+n"
+           @click="$emit('input', fullStars + n)"
+        ></i>
     </div>
 </template>
 
@@ -10,19 +18,18 @@
     export default {
         name: "StarRating",
         props: {
-            rating: Number,
-            bookableId: String
+            value: Number
         },
         computed: {
             fullStars() {
-                return Math.round(this.rating)
+                return Math.round(this.value)
             },
             halfStar() {
-                const diff = this.rating - Math.floor(this.rating)
+                const diff = this.value - Math.floor(this.value)
                 return  diff > 0 && diff < 0.5
             },
             emptyStars() {
-                return 5 - Math.ceil(this.rating)
+                return 5 - Math.ceil(this.value)
             }
         }
     }
