@@ -1,5 +1,4 @@
 import VueRouter from "vue-router";
-import Example2 from "./components/Example2";
 import Bookables from "./bookables/Bookables";
 import Bookable from "./bookable/Bookable";
 
@@ -16,7 +15,7 @@ const routes = [
     },
     {
         path: '/second',
-        component: Example2,
+        component: Bookable,
         name: 'second'
     }
 ]
