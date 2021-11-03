@@ -1,8 +1,9 @@
 <template>
-    <div class="row">
+    <fatal-error v-if="error"></fatal-error>
+    <div v-else class="row">
         <div :class="{
-            'col-md-4': loading || !alreadyReviewed,
-            'd-none': !loading && alreadyReviewed
+            'col-md-4': twoColumns,
+            'd-none': oneColumn
         }">
             <div class="card">
                 <div class="card-body" v-if="booking">
@@ -10,15 +11,19 @@
                         Loading...
                     </div>
                     <div v-else>
-                        <p>Вы останавливались в <router-link :to="{name: 'bookable', params: {id: booking.bookable.bookable_id}}">{{booking.bookable.title}}</router-link></p>
+                        <p>Вы останавливались в
+                            <router-link :to="{name: 'bookable', params: {id: booking.bookable.bookable_id}}">
+                                {{booking.bookable.title}}
+                            </router-link>
+                        </p>
                         <div>c {{booking.from}} по {{booking.to}}</div>
                     </div>
                 </div>
             </div>
         </div>
         <div :class="{
-            'col-md-8': loading || !alreadyReviewed,
-            'col-md-12': !loading && alreadyReviewed
+            'col-md-8': twoColumns,
+            'col-md-12': oneColumn
         }">
             <div v-if="loading">
                 Loading data...
@@ -37,9 +42,9 @@
                         </div>
                         <div class="form-group">
                             <label for="content" class="text-muted">Describe your experience with</label>
-                            <textarea name="content" id="content" cols="30" rows="10" class="form-control"></textarea>
+                            <textarea v-model="review.content" name="content" id="content" cols="30" rows="10" class="form-control"></textarea>
                         </div>
-                        <button class="btn btn-lg btn-primary btn-block">Submit</button>
+                        <button @click="submit" class="btn btn-lg btn-primary btn-block" :disabled="loading">Submit</button>
                     </div>
                 </div>
             </div>
@@ -48,17 +53,22 @@
 </template>
 
 <script>
+    import {is404, is422} from "../shared/utils/response";
+
     export default {
         name: "Review",
         data() {
             return {
                 review: {
+                    id: null,
                     rating: 5,
                     content: null
                 },
                 existingReview: null,
                 loading: false,
-                booking: null
+                booking: null,
+                error: false,
+                errors: null,
             }
         },
         computed: {
@@ -70,9 +80,37 @@
             },
             hasBooking() {
                 return this.booking !== null
+            },
+            oneColumn() {
+                return !this.loading && this.alreadyReviewed
+            },
+            twoColumns() {
+                return this.loading || !this.alreadyReviewed
+            }
+        },
+        methods: {
+            submit() {
+                this.loading = true
+                axios.post(`/api/reviews`, this.review).then(response => {
+                    console.log(response.data)
+                }).catch(err => {
+                    if(is422(err)) {
+                        const errors = err.response.data.errors
+                        console.log(errors)
+                        if(Boolean(errors['content']) && Boolean(_.size(errors['content']) === 1)) {
+                            this.errors = errors
+                            console.log('before return')
+                            return
+                        }
+                    }
+                    this.error = true
+                }).finally(() => {
+                    this.loading = false
+                })
             }
         },
         created() {
+            this.review.id = this.$route.params.id
             this.loading = true
             axios.get(`/api/reviews/${this.$route.params.id}`)
                 .then((response) => {
@@ -80,12 +118,16 @@
                     this.existingReview = response.data.data
                 })
                 .catch((err) => {
-                    if (err.response && err.response.status && err.response.status === 404) {
-                        axios.get(`/api/booking-by-review/${this.$route.params.id}`)
+                    if (is404(err)) {
+                        return axios.get(`/api/booking-by-review/${this.$route.params.id}`)
                             .then((response) => {
                                 this.booking = response.data.data
+                            }).catch(err => {
+                                if (!is404(err)) this.error = true
                             })
                     }
+
+                    this.error = true
                 })
                 .finally(() => {
                     this.loading = false
