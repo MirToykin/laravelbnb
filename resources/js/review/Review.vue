@@ -1,5 +1,8 @@
 <template>
-  <fatal-error v-if="error"></fatal-error>
+  <div v-if="success || error">
+    <fatal-error v-if="error"></fatal-error>
+    <success-result v-if="success">Ваш отзыв отправлен</success-result>
+  </div>
   <div v-else class="row">
     <div
       :class="{
@@ -98,6 +101,7 @@ export default {
       booking: null,
       error: false,
       sending: false,
+      success: false,
     };
   },
   computed: {
@@ -122,11 +126,15 @@ export default {
   },
   methods: {
     submit() {
+      this.success = false;
       this.sending = true;
       axios
         .post(`/api/reviews`, this.review)
         .then((response) => {
           console.log(response.data);
+          if (response.status === 201) {
+            this.success = true;
+          }
         })
         .catch((err) => {
           if (is422(err)) {

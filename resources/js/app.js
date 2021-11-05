@@ -5,6 +5,7 @@ import moment from "moment";
 import StarRating from "./shared/components/StarRating";
 import FatalError from "./shared/components/FatalError";
 import ValidationErrors from "./shared/components/ValidationErrors"
+import Success from "./shared/components/Success"
 
 require('./bootstrap');
 
@@ -15,6 +16,7 @@ Vue.filter('fromNow', (value) => moment(value).locale('ru').fromNow())
 Vue.component('star-rating', StarRating)
 Vue.component('fatal-error', FatalError)
 Vue.component('validation-errors', ValidationErrors)
+Vue.component('success-result', Success)
 
 const app = new Vue({
     el: '#app',
