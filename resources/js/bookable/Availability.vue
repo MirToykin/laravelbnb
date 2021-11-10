@@ -68,7 +68,7 @@ export default {
     };
   },
   methods: {
-    check() {
+    async check() {
       this.loading = true;
       this.errors = null;
 
@@ -77,23 +77,24 @@ export default {
         to: this.lastSearch.to,
       });
 
-      axios
-        .get(
-          `/api/bookables/${this.bookableId}/availability?from=${this.lastSearch.from}&to=${this.lastSearch.from}`
-        )
-        .then((response) => {
-          this.status = response.status;
-        })
-        .catch((error) => {
-          if (is422(error)) {
-            this.errors = error.response.data.errors;
-          }
-          //todo предусмотреть проверку наличия response и status
-          this.status = error.response.status;
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+      try {
+        this.status = (
+          await axios.get(
+            `/api/bookables/${this.bookableId}/availability?from=${this.lastSearch.from}&to=${this.lastSearch.from}`
+          )
+        ).status;
+        this.$emit("availability", this.hasAvailability);
+      } catch (err) {
+        if (is422(err)) {
+          this.errors = err.response.data.errors;
+        }
+        //todo предусмотреть проверку наличия response и status
+        this.status = err.response.status;
+
+        this.$emit("availability", this.hasAvailability);
+      }
+
+      this.loading = false;
     },
   },
   computed: {

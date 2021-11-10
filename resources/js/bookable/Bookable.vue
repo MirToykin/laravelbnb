@@ -1,46 +1,56 @@
 <template>
-    <div v-if="loading">Data is loading...</div>
-    <div v-else class="row">
-        <div class="col-md-8 pb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h2>{{bookable.title}}</h2>
-                    <hr/>
-                    <article>{{bookable.description}}</article>
-                </div>
-            </div>
-            <review-list :bookable-id="$route.params.id"></review-list>
+  <div v-if="loading">Data is loading...</div>
+  <div v-else class="row">
+    <div class="col-md-8 pb-4">
+      <div class="card">
+        <div class="card-body">
+          <h2>{{ bookable.title }}</h2>
+          <hr />
+          <article>{{ bookable.description }}</article>
         </div>
-        <div class="col-md-4 pb-4"><availability :bookable-id="$route.params.id"></availability></div>
+      </div>
+      <review-list :bookable-id="$route.params.id"></review-list>
     </div>
+    <div class="col-md-4 pb-4">
+      <availability
+        @availability="checkPrice"
+        :bookable-id="$route.params.id"
+      ></availability>
+    </div>
+  </div>
 </template>
 
 <script>
-    import Availability from "./Availability";
-    import ReviewList from "./ReviewList";
+import Availability from "./Availability";
+import ReviewList from "./ReviewList";
 
-    export default {
-        name: "Bookable",
-        data() {
-            return {
-                bookable: null,
-                loading: false
-            }
-        },
-        components: {
-            Availability,
-            ReviewList
-        },
-        created() {
-            this.loading = true
-            axios.get(`/api/bookables/${this.$route.params.id}`)
-                .then(response => this.bookable = response.data.data)
-                .catch(err => console.log(err.message))
-                .finally(() => this.loading = false)
-        }
-    }
+export default {
+  name: "Bookable",
+  data() {
+    return {
+      bookable: null,
+      loading: false,
+    };
+  },
+  components: {
+    Availability,
+    ReviewList,
+  },
+  created() {
+    this.loading = true;
+    axios
+      .get(`/api/bookables/${this.$route.params.id}`)
+      .then((response) => (this.bookable = response.data.data))
+      .catch((err) => console.log(err.message))
+      .finally(() => (this.loading = false));
+  },
+  methods: {
+    checkPrice(availability) {
+      console.log("availability", availability);
+    },
+  },
+};
 </script>
 
 <style scoped>
-
 </style>
