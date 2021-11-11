@@ -64,7 +64,10 @@ export default {
   },
   methods: {
     async checkPrice(availability) {
-      if (!availability) return;
+      if (!availability) {
+        this.price = null;
+        return;
+      }
       // this.loading = true;
       try {
         this.price = (
