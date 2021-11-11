@@ -38,13 +38,13 @@
       </div>
       <button
         @click="check"
-        :disabled="loading"
+        :disabled="showLoader"
         class="btn btn-secondary btn-block"
       >
-        <span v-if="loading"
+        <span v-if="showLoader"
           ><i class="fas fa-circle-notch fa-spin"></i> Checking...</span
         >
-        <span v-if="!loading">Check</span>
+        <span v-if="!showLoader">Check</span>
       </button>
     </div>
   </div>
@@ -60,6 +60,7 @@ export default {
   name: "Availability",
   props: {
     bookableId: [String, Number],
+    priceFetching: [Boolean],
   },
   data() {
     return {
@@ -110,6 +111,9 @@ export default {
     ...mapState({
       lastSearch: (state) => state.lastSearch,
     }),
+    showLoader() {
+      return this.loading || this.priceFetching;
+    },
   },
 };
 </script>
@@ -120,5 +124,10 @@ label {
   color: grey;
   text-transform: uppercase;
   font-size: 0.7rem;
+}
+
+.form-row {
+  margin-right: 0;
+  margin-left: 0;
 }
 </style>

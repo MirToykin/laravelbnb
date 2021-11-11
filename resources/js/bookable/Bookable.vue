@@ -15,13 +15,28 @@
       <availability
         @availability="checkPrice"
         :bookable-id="$route.params.id"
+        :price-fetching="priceFetching"
       ></availability>
+      <transition>
+        <price-breakdown
+          v-if="price"
+          :price="price"
+          class="mt-4"
+        ></price-breakdown>
+      </transition>
+      <transition name="fade">
+        <button v-if="price" class="btn btn-outline-secondary btn-block">
+          Book now
+        </button>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import Availability from "./Availability";
+import PriceBreakdown from "./PriceBreakdown.vue";
 import ReviewList from "./ReviewList";
 
 export default {
@@ -30,11 +45,14 @@ export default {
     return {
       bookable: null,
       loading: false,
+      price: null,
+      priceFetching: false,
     };
   },
   components: {
     Availability,
     ReviewList,
+    PriceBreakdown,
   },
   created() {
     this.loading = true;
@@ -45,10 +63,26 @@ export default {
       .finally(() => (this.loading = false));
   },
   methods: {
-    checkPrice(availability) {
-      console.log("availability", availability);
+    async checkPrice(availability) {
+      if (!availability) return;
+      // this.loading = true;
+      try {
+        this.price = (
+          await axios.get(
+            `/api/bookables/${this.$route.params.id}/price?from=${this.lastSearch.from}&to=${this.lastSearch.to}`
+          )
+        ).data.data;
+        console.log(this.price);
+      } catch (err) {
+        console.log("error", err);
+        this.price = null;
+      }
+      // this.loading = false;
     },
   },
+  computed: mapState({
+    lastSearch: "lastSearch",
+  }),
 };
 </script>
 

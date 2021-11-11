@@ -29,7 +29,12 @@ class BookablePriceController extends Controller
         $totalPrice = $days * $bookable->price;
 
         return response()->json([
-            'total' => $totalPrice
+            'data' => [
+                'total' => $totalPrice,
+                'breakdown' => [
+                    $bookable->price => $days
+                ]
+            ]
         ]);
     }
 }
