@@ -81,7 +81,7 @@ export default {
       try {
         this.status = (
           await axios.get(
-            `/api/bookables/${this.bookableId}/availability?from=${this.lastSearch.from}&to=${this.lastSearch.from}`
+            `/api/bookables/${this.bookableId}/availability?from=${this.lastSearch.from}&to=${this.lastSearch.to}`
           )
         ).status;
         this.$emit("availability", this.hasAvailability);
