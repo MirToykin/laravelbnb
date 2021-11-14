@@ -25,10 +25,14 @@
                 ></price-breakdown>
             </transition>
             <transition name="fade">
-                <button @click="addToBasket" v-if="price" class="btn btn-outline-secondary btn-block">
+                <button :disabled="inBasketAlready" @click="addToBasket" v-if="price" class="btn btn-outline-secondary btn-block">
                     Book now
                 </button>
             </transition>
+            <button v-if="inBasketAlready" @click="removeFromBasket" class="btn btn-outline-secondary btn-block">
+                Remove from basket
+            </button>
+            <div v-if="inBasketAlready" class="mt-4 text-muted warning">Bookable already in basket</div>
         </div>
     </div>
 </template>
@@ -90,13 +94,27 @@ export default {
             }
 
             this.$store.commit('addToBasket', payload)
+        },
+        removeFromBasket() {
+            this.$store.commit('removeFromBasket', this.bookable.id)
         }
     },
-    computed: mapState({
-        lastSearch: "lastSearch",
-    }),
+    computed: {
+        ...mapState({
+            lastSearch: "lastSearch",
+        }),
+        inBasketAlready(state) {
+            if (this.bookable === null) return null
+
+            return this.$store.getters.inBasketAlready(this.bookable.id)
+        }
+
+    },
 };
 </script>
 
 <style scoped>
+.warning {
+    font-size: 0.7rem;
+}
 </style>

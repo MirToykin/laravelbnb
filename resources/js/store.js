@@ -13,10 +13,10 @@ export default {
             state.lastSearch = payload
         },
         addToBasket(state, payload) {
-            this.state.basket.items.push(payload)
+            state.basket.items.push(payload)
         },
         removeFromBasket(state, id) {
-            this.state.basket.items.filter((item) => item.id !== id)
+            state.basket.items = state.basket.items.filter((item) => item.bookable.id !== id)
         }
     },
     actions: {
@@ -34,6 +34,7 @@ export default {
     getters: {
         itemsInBasket(state) {
             return state.basket.items.length
-        }
+        },
+        inBasketAlready: (state) => (id) => state.basket.items.reduce((result, item) => result || item.bookable.id === id, false)
     }
 }
