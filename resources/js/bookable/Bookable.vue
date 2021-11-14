@@ -29,7 +29,7 @@
                     Book now
                 </button>
             </transition>
-            <button v-if="inBasketAlready" @click="removeFromBasket" class="btn btn-outline-secondary btn-block">
+            <button v-if="inBasketAlready" @click="removeFromBasket" class="btn btn-outline-secondary btn-block mt-2">
                 Remove from basket
             </button>
             <div v-if="inBasketAlready" class="mt-4 text-muted warning">Bookable already in basket</div>
@@ -93,17 +93,17 @@ export default {
                 dates: this.lastSearch
             }
 
-            this.$store.commit('addToBasket', payload)
+            this.$store.dispatch('addToBasket', payload)
         },
         removeFromBasket() {
-            this.$store.commit('removeFromBasket', this.bookable.id)
+            this.$store.dispatch('removeFromBasket', this.bookable.id)
         }
     },
     computed: {
         ...mapState({
             lastSearch: "lastSearch",
         }),
-        inBasketAlready(state) {
+        inBasketAlready() {
             if (this.bookable === null) return null
 
             return this.$store.getters.inBasketAlready(this.bookable.id)

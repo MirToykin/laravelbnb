@@ -17,6 +17,9 @@ export default {
         },
         removeFromBasket(state, id) {
             state.basket.items = state.basket.items.filter((item) => item.bookable.id !== id)
+        },
+        setBasket(state, payload) {
+            state.basket = payload
         }
     },
     actions: {
@@ -25,16 +28,33 @@ export default {
             commit('setLastSearch', payload)
         },
         loadStoredState({commit}) {
-            const storedState = localStorage.getItem('lastSearch')
-            if (storedState !== null) {
-                commit('setLastSearch', JSON.parse(storedState))
+            const lastSearch = localStorage.getItem('lastSearch')
+            if (lastSearch !== null) {
+                commit('setLastSearch', JSON.parse(lastSearch))
             }
+
+            const basket = localStorage.getItem('basket')
+            if (basket !== null) {
+                commit('setBasket', JSON.parse(basket))
+            }
+        },
+        addToBasket({state, commit}, payload) {
+            commit('addToBasket', payload)
+            const basket = state.basket
+            localStorage.setItem('basket', JSON.stringify(basket))
+        },
+        removeFromBasket({state, commit}, id) {
+            commit('removeFromBasket', id)
+            const basket = state.basket
+            localStorage.setItem('basket', JSON.stringify(basket))
         }
     },
     getters: {
         itemsInBasket(state) {
             return state.basket.items.length
         },
-        inBasketAlready: (state) => (id) => state.basket.items.reduce((result, item) => result || item.bookable.id === id, false)
+        inBasketAlready: (state) => (id) => {
+            return state.basket.items.reduce((result, item) => result || item.bookable.id === id, false)
+        }
     }
 }
