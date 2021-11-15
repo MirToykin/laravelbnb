@@ -2,7 +2,7 @@
     <div>
         <nav class="navbar bg-white border-bottom navbar-light">
             <router-link :to="{name: 'home'}" class="navbar-brand mr-auto">LaravelBnb</router-link>
-            <router-link :to="{name: 'home'}" class="btn nav-button">Basket
+            <router-link :to="{name: 'basket'}" class="btn nav-button">Basket
                 <span v-if="itemsInBasket" class="badge badge-secondary">{{itemsInBasket}}</span>
             </router-link>
         </nav>
