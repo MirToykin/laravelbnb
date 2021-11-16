@@ -14,7 +14,7 @@ class BookablePriceController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function __invoke($id, Request $request)
     {
@@ -25,16 +25,8 @@ class BookablePriceController extends Controller
             'to' => 'required|date_format:Y-m-d|after_or_equal:from'
         ]);
 
-        $days = Carbon::parse($data['from'])->diffInDays(Carbon::parse($data['to'])) + 1;
-        $totalPrice = $days * $bookable->price;
-
         return response()->json([
-            'data' => [
-                'total' => $totalPrice,
-                'breakdown' => [
-                    $bookable->price => $days
-                ]
-            ]
+            'data' => $bookable->priceFor($data['from'], $data['to'])
         ]);
     }
 }

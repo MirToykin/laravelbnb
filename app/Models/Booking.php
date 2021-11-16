@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Address;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
@@ -13,6 +14,10 @@ class Booking extends Model
     public function bookable()
     {
         return $this->belongsTo(Bookable::class);
+    }
+
+    public function address() {
+        return $this->belongsTo(Address::class);
     }
 
     public function review()
