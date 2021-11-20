@@ -47,6 +47,10 @@ export default {
             commit('removeFromBasket', id)
             const basket = state.basket
             localStorage.setItem('basket', JSON.stringify(basket))
+        },
+        cleanBasket({state, commit}) {
+            commit('setBasket', {items: []})
+            localStorage.setItem('basket', JSON.stringify(state.basket))
         }
     },
     getters: {
