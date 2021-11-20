@@ -162,6 +162,7 @@ export default {
 
             this.loading = false
             this.bookingAttempted = true
+
         }
     },
     computed: {
